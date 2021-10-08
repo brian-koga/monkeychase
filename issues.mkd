@@ -1,9 +1,9 @@
 ## Resolved Issues ##
 - **[1]** Need a skeletal, executable game
+- **[2]** Add something to represent the tiles and the walls
 
 
 ## Open Issues ##
-- **[2]** Add something to represent the tiles and the walls
 - **[3]** Add initial eyecandy, score tracking and lives counter
 - **[4]** Add graphics for monkeys
 - **[5]** Add controls for the monkeys

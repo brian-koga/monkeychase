@@ -119,8 +119,8 @@ public class MonkeyGame extends StateBasedGame {
 	public static void main(String[] args) {
 		AppGameContainer app;
 		try {
-			app = new AppGameContainer(new MonkeyGame("Monkey See, Monkey Run!", 896, 768));
-			app.setDisplayMode(896, 768, false);
+			app = new AppGameContainer(new MonkeyGame("Monkey See, Monkey Run!", 928, 800));
+			app.setDisplayMode(928, 800, false);
 			app.setVSync(true);
 			app.start();
 		} catch (SlickException e) {

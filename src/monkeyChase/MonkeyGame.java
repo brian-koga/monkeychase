@@ -54,6 +54,10 @@ public class MonkeyGame extends StateBasedGame {
 	public static final String STARTUP_BANNER_RSC = "monkeyChase/resource/PressSpace.png";
 
 	public static final String Tree_RSC = "monkeyChase/resource/minitree.png";
+	public static final String Monkey_RSC = "monkeyChase/resource/Monkey.png";
+	public static final String Banana_RSC = "monkeyChase/resource/Banana.png";
+
+
 
 
 	public final int ScreenWidth;
@@ -112,6 +116,8 @@ public class MonkeyGame extends StateBasedGame {
 		ResourceManager.loadImage(STARTUP_BANNER_RSC);
 
 		ResourceManager.loadImage(Tree_RSC);
+		ResourceManager.loadImage(Monkey_RSC);
+		ResourceManager.loadImage(Banana_RSC);
 
 
 	}

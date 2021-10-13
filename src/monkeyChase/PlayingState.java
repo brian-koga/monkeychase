@@ -49,8 +49,8 @@ class PlayingState extends BasicGameState {
 		MonkeyGame mg = (MonkeyGame)game;
 
 		g.drawString("Lives: " + mg.lives, 10, 30);
-		g.drawString("Score: " + mg.score, 10, 50);
-		g.drawString("Level: " + mg.level, 10, 70);
+		g.drawString("Score: " + mg.score, 110, 10);
+		g.drawString("Level: " + mg.level, 110, 30);
 
 		float x = 0;
 		for(int i = 0; i < 29; i++) {
@@ -234,7 +234,10 @@ class PlayingState extends BasicGameState {
 		//		mg.tileSize*14.5f);
 
 
+	g.drawImage(ResourceManager.getImage(MonkeyGame.Monkey_RSC), mg.tileSize*6.5f, mg.ScreenHeight-mg.tileSize*6.5f);
 
+
+	g.drawImage(ResourceManager.getImage(MonkeyGame.Banana_RSC), mg.tileSize*7.25f, mg.ScreenHeight-mg.tileSize*2.75f);
 
 	}
 

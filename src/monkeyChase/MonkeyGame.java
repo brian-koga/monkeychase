@@ -78,9 +78,11 @@ public class MonkeyGame extends StateBasedGame {
 	int maxLevel = 3;
 
 	int[][] grid;
+	int[][] bananaGrid;
 
 	Monkey monkey1;
 	ArrayList<Tree> trees = new ArrayList<>();
+	ArrayList<Banana> bananas = new ArrayList<>();
 
 
 	/**
@@ -106,8 +108,10 @@ public class MonkeyGame extends StateBasedGame {
 		tileSize = 32;
 
 		grid = new int[29][25];
+		bananaGrid = new int[29][25];
 		for(int i = 0; i < 29; i++) {
 			Arrays.fill(grid[i], 0);
+			Arrays.fill(bananaGrid[i], 0);
 		}
 	}
 
@@ -132,7 +136,7 @@ public class MonkeyGame extends StateBasedGame {
 		ResourceManager.loadImage(Tree_RSC);
 		ResourceManager.loadImage(Monkey_RSC);
 		ResourceManager.loadImage(Banana_RSC);
-		ResourceManager.loadImage(Alien_RSC);
+		//ResourceManager.loadImage(Alien_RSC);
 
 		monkey1 = new Monkey(tileSize*14.5f, tileSize*22.5f, 14, 22);
 

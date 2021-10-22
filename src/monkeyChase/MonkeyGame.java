@@ -1,6 +1,8 @@
 package monkeyChase;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Stack;
 
 import jig.Entity;
 import jig.ResourceManager;
@@ -54,8 +56,10 @@ public class MonkeyGame extends StateBasedGame {
 	public static final String STARTUP_BANNER_RSC = "monkeyChase/resource/PressSpace.png";
 
 	public static final String Tree_RSC = "monkeyChase/resource/minitree.png";
+	//https://opengameart.org/content/minitrees
 	public static final String Monkey_RSC = "monkeyChase/resource/Monkey.png";
 	public static final String Banana_RSC = "monkeyChase/resource/Banana.png";
+	public static final String Alien_RSC = "monkeyChase/resource/Alien.png";
 
 
 
@@ -72,6 +76,11 @@ public class MonkeyGame extends StateBasedGame {
 	int tileSize;
 
 	int maxLevel = 3;
+
+	int[][] grid;
+
+	Monkey monkey1;
+	ArrayList<Tree> trees = new ArrayList<>();
 
 
 	/**
@@ -95,6 +104,11 @@ public class MonkeyGame extends StateBasedGame {
 		level = 0;
 		score = 0;
 		tileSize = 32;
+
+		grid = new int[29][25];
+		for(int i = 0; i < 29; i++) {
+			Arrays.fill(grid[i], 0);
+		}
 	}
 
 
@@ -118,6 +132,9 @@ public class MonkeyGame extends StateBasedGame {
 		ResourceManager.loadImage(Tree_RSC);
 		ResourceManager.loadImage(Monkey_RSC);
 		ResourceManager.loadImage(Banana_RSC);
+		ResourceManager.loadImage(Alien_RSC);
+
+		monkey1 = new Monkey(tileSize*14.5f, tileSize*22.5f, 14, 22);
 
 
 	}

@@ -366,11 +366,10 @@ class PlayingState extends BasicGameState {
 		g.drawString("Score: " + mg.score, 110, 10);
 		g.drawString("Level: " + mg.level, 110, 30);
 
+
+		// draw grid
 		float x = 0;
 		float y = 0;
-
-
-
 
 		for(int i = 0; i < 29; i++) {
 			g.drawLine(x, 0, x, mg.ScreenHeight);
@@ -384,12 +383,13 @@ class PlayingState extends BasicGameState {
 		}
 
 
-
-
-		//g.drawImage(ResourceManager.getImage(MonkeyGame.Alien_RSC), mg.tileSize*13.5f, mg.tileSize*5.5f);
-
-		//draw bananas
+		// draw bananas
 		for(Banana temp : mg.bananas) {
+			temp.render(g);
+		}
+
+		// draw aliens
+		for(Alien temp : mg.aliens) {
 			temp.render(g);
 		}
 

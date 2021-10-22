@@ -84,6 +84,8 @@ public class MonkeyGame extends StateBasedGame {
 	ArrayList<Tree> trees = new ArrayList<>();
 	ArrayList<Banana> bananas = new ArrayList<>();
 
+	ArrayList<Alien> aliens = new ArrayList<>();
+
 
 	/**
 	 * Create the BounceGame frame, saving the width and height for later use.
@@ -136,10 +138,12 @@ public class MonkeyGame extends StateBasedGame {
 		ResourceManager.loadImage(Tree_RSC);
 		ResourceManager.loadImage(Monkey_RSC);
 		ResourceManager.loadImage(Banana_RSC);
-		//ResourceManager.loadImage(Alien_RSC);
+		ResourceManager.loadImage(Alien_RSC);
 
 		monkey1 = new Monkey(tileSize*14.5f, tileSize*22.5f, 14, 22);
 
+		aliens.add(new Alien(tileSize*2.5f, tileSize*11.5f, 2, 11));
+		aliens.add(new Alien(tileSize*26.5f, tileSize*14.5f, 26, 14));
 
 	}
 	

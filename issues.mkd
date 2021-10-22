@@ -5,10 +5,10 @@
 - **[4]** Add graphics for monkeys
 - **[5]** Add controls for the monkeys
 - **[6]** Add bananas and track removing bananas
+- **[7]** Add aliens
 
 
 ## Open Issues ##
-- **[7]** Add aliens
 - **[8]** Add pathfinding for aliens
 - **[9]** Add gorillas
 - **[10]** Add pathfinding for gorillas

@@ -2,18 +2,13 @@ package monkeyChase;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.*;
 import java.lang.Math;
-import java.util.Scanner;
 
 import jig.ResourceManager;
 import jig.Vector;
 
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Input;
-import org.newdawn.slick.SlickException;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -49,6 +44,24 @@ class PlayingState extends BasicGameState {
 		if(levelNumber == 1) {
 			setupLevel1(mg);
 		}
+
+		// populate tile grid
+		for(int i = 0; i < 29; i++) {
+			for(int j = 0; j < 25; j++) {
+				// this is an 'inner tile' want to check grid value
+				if(i > 1 && j > 1 && i < 27 && j < 23) {
+					if(mg.grid[i][j] == 1) {
+						mg.tileGrid[i][j] = new Tile(i, j, true);
+					}  else {
+						mg.tileGrid[i][j] = new Tile(i, j, false);
+					}
+				} else {
+					// these will be edge tiles, and will always be invalid
+					mg.tileGrid[i][j] = new Tile(i, j, false);
+				}
+			}
+		}
+
 
 		// create Trees and Bananas
 		for(int i = 0; i < 28; i++) {
@@ -356,17 +369,89 @@ class PlayingState extends BasicGameState {
 		}
 	}
 
+	public void Dijkstra(MonkeyGame mg) {
+
+		ArrayList<Tile> Q = new ArrayList<>();
+		ArrayList<Tile> S = new ArrayList<>();
+
+		// initialize single source
+		for(int i = 0; i < 29; i++) {
+			for(int j = 0; j < 25; j++) {
+				// set this to a really high number, doesn't need to be infinity
+				mg.d[i][j] = 1000;
+				// set this to X to represent none
+				mg.pi[i][j] = null;
+				// want to create and add valid vertices to the list
+				// ignore outside rows and columns and only examine valid tiles
+				if(i > 1 && i < 28 && j > 1 && j < 24 && mg.grid[i][j] == 1) {
+					ArrayList<Tile> temp = new ArrayList<>();
+					// check all 4 neighbors
+					if(mg.tileGrid[i-1][j].valid) {
+						temp.add(mg.tileGrid[i-1][j]);
+					}
+					if(mg.tileGrid[i+1][j].valid) {
+						temp.add(mg.tileGrid[i+1][j]);
+					}
+					if(mg.tileGrid[i][j-1].valid) {
+						temp.add(mg.tileGrid[i][j-1]);
+					}
+					if(mg.tileGrid[i][j+1].valid) {
+						temp.add(mg.tileGrid[i][j+1]);
+					}
+					// set the validNeighbors and d
+					mg.tileGrid[i][j].setNeighbors(temp);
+					mg.tileGrid[i][j].setD(100);
+
+					// also, add these valid tiles to Q
+					Q.add(mg.tileGrid[i][j]);
+				} else {
+					mg.tileGrid[i][j].setD(1000);
+				}
+			}
+		}
+		//s is monkey location
+		mg.d[mg.monkey1.gridX][mg.monkey1.gridY] = 0;
+		mg.tileGrid[mg.monkey1.gridX][mg.monkey1.gridY].setD(0);
+
+		while (!Q.isEmpty()) {
+			// extract min
+			// initialize this to upper right, which has a really high d value
+			Tile temp = mg.tileGrid[1][1];
+			int minIndex = -1;
+			for (int i = 0; i < Q.size(); i++) {
+				if(Q.get(i).d < temp.d) {
+					temp = Q.get(i);
+					minIndex = i;
+				}
+			}
+			// remove the min from Q
+			Q.remove(minIndex);
+			S.add(temp);
+			// relax
+			for(Tile t : temp.validNeighbors) {
+				if(t.d > temp.d + 1) {
+					// update the d grid in mg as well as the tile object
+					mg.d[t.x][t.y] = temp.d + 1;
+					t.d = temp.d + 1;
+					mg.pi[t.x][t.y] = temp;
+				}
+			}
+		}
+	}
+
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game,
 			Graphics g) throws SlickException {
 		MonkeyGame mg = (MonkeyGame)game;
+		g.setColor(Color.white);
 
 		g.drawString("Lives: " + mg.lives, 10, 30);
 		g.drawString("Score: " + mg.score, 110, 10);
 		g.drawString("Level: " + mg.level, 110, 30);
 
 
+		/*
 		// draw grid
 		float x = 0;
 		float y = 0;
@@ -381,6 +466,8 @@ class PlayingState extends BasicGameState {
 			g.drawLine(0, y, mg.ScreenWidth, y);
 			y += mg.tileSize;
 		}
+
+		 */
 
 
 		// draw bananas
@@ -400,6 +487,21 @@ class PlayingState extends BasicGameState {
 		for(Tree temp : mg.trees) {
 			temp.render(g);
 		}
+
+		/*
+
+		g.setColor(Color.cyan);
+		// dijkstra results
+		for(int i = 0; i < 29; i++) {
+			for(int j = 0; j < 25; j++) {
+				if(mg.d[i][j] != 1000) {
+					g.drawString("" + mg.d[i][j], mg.tileSize * (i + 0.25f), mg.tileSize * (j + 0.25f));
+				}
+			}
+		}
+
+		 */
+
 	}
 
 	@Override
@@ -409,18 +511,72 @@ class PlayingState extends BasicGameState {
 		Input input = container.getInput();
 		MonkeyGame mg = (MonkeyGame)game;
 
-		int x1 = mg.monkey1.gridX;
-		int y1 = mg.monkey1.gridY;
+		// decide enemy movement
+		Dijkstra(mg);
+
+
+		for(Alien temp : mg.aliens) {
+			if(mg.d[temp.gridX][temp.gridY] != 0) {
+				int x = temp.gridX;
+				int y = temp.gridY;
+				char moveToMake = temp.lastMove;
+
+				float aXMod32 = temp.getX()%32;
+				float aYMod32 = temp.getY()%32;
+
+				//only allow a tile change if in the center
+				if((16 - aXMod32 == 0) && (16 - aYMod32 == 0)) {
+					int min = 1000;
+					// check to the left
+					if (mg.d[x - 1][y] < min) {
+						moveToMake = 'L';
+						min = mg.d[x - 1][y];
+					}
+					if (mg.d[x + 1][y] < min) {
+						moveToMake = 'R';
+						min = mg.d[x + 1][y];
+					}
+					if (mg.d[x][y - 1] < min) {
+						moveToMake = 'U';
+						min = mg.d[x][y - 1];
+					}
+					if (mg.d[x][y + 1] < min) {
+						moveToMake = 'D';
+						min = mg.d[x][y + 1];
+					}
+				}
+
+				// make a move
+				if (moveToMake == 'L') {
+					temp.translate(-1 * temp.stepSize, 0);
+					temp.lastMove = 'L';
+				} else if (moveToMake == 'R') {
+					temp.translate(temp.stepSize, 0);
+					temp.lastMove = 'R';
+				} else if (moveToMake == 'U') {
+					temp.translate(0, -1 * temp.stepSize);
+					temp.lastMove = 'U';
+				} else {
+					temp.translate(0, temp.stepSize);
+					temp.lastMove = 'D';
+				}
+			}
+			// update alien
+			temp.setTile((int)Math.floor(temp.getX()/32), (int) Math.floor(temp.getY()/32));
+		}
 
 		// will treat horizontal and vertical movement separately
 
 		// Horizontal movement
 
+		int x1 = mg.monkey1.gridX;
+		int y1 = mg.monkey1.gridY;
+
 		boolean nearlyCenteredHorizontally = false;
 
 		// if within 2 pixels of either side of center
 		float m1XMod32 = mg.monkey1.getX()%32;
-		if(Math.abs(16.0f - m1XMod32) <= 8) {
+		if(Math.abs(16.0f - m1XMod32) <= 12) {
 			nearlyCenteredHorizontally = true;
 		}
 
@@ -429,7 +585,7 @@ class PlayingState extends BasicGameState {
 
 		// if within 2 pixels of either side of center
 		float m1YMod32 = mg.monkey1.getY()%32;
-		if(Math.abs(16.0f - m1YMod32) <= 8) {
+		if(Math.abs(16.0f - m1YMod32) <= 12) {
 			nearlyCenteredVertically = true;
 		}
 

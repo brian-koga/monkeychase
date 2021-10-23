@@ -3,7 +3,6 @@ package monkeyChase;
 import jig.Entity;
 import jig.ResourceManager;
 
-import java.util.Stack;
 
 public class Banana extends Entity {
     int gridX;

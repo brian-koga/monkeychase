@@ -10,10 +10,10 @@ public class Alien extends Entity {
     int gridY;
     boolean isCentered;
     char lastMove;
-    int stepSize = 2;
+    int stepSize = 1;
 
 
-    public Alien(final float x, final float y, int tilex, int tiley) {
+    public Alien(final float x, final float y, int tilex, int tiley, int stepSize) {
         super(x, y);
         addImageWithBoundingBox(ResourceManager
                 .getImage(MonkeyGame.Alien_RSC));
@@ -21,6 +21,7 @@ public class Alien extends Entity {
         gridX = tilex;
         gridY = tiley;
         lastMove = 'X';
+        this.stepSize = stepSize;
     }
 
     public void setTile(int x, int y) {

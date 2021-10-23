@@ -2,8 +2,6 @@ package monkeyChase;
 
 import jig.Entity;
 import jig.ResourceManager;
-
-import java.util.ArrayList;
 import java.util.Stack;
 
 public class Monkey extends Entity {

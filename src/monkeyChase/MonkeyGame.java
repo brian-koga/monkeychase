@@ -79,6 +79,10 @@ public class MonkeyGame extends StateBasedGame {
 
 	int[][] grid;
 	int[][] bananaGrid;
+	Tile[][] tileGrid;
+
+	int[][] d;
+	Tile[][] pi;
 
 	Monkey monkey1;
 	ArrayList<Tree> trees = new ArrayList<>();
@@ -109,8 +113,12 @@ public class MonkeyGame extends StateBasedGame {
 		score = 0;
 		tileSize = 32;
 
+		d = new int[29][25];
+		pi = new Tile[29][25];
 		grid = new int[29][25];
 		bananaGrid = new int[29][25];
+		tileGrid = new Tile[29][25];
+
 		for(int i = 0; i < 29; i++) {
 			Arrays.fill(grid[i], 0);
 			Arrays.fill(bananaGrid[i], 0);
@@ -142,8 +150,8 @@ public class MonkeyGame extends StateBasedGame {
 
 		monkey1 = new Monkey(tileSize*14.5f, tileSize*22.5f, 14, 22);
 
-		aliens.add(new Alien(tileSize*2.5f, tileSize*11.5f, 2, 11));
-		aliens.add(new Alien(tileSize*26.5f, tileSize*14.5f, 26, 14));
+		aliens.add(new Alien(tileSize*2.5f, tileSize*11.5f, 2, 11, 2));
+		aliens.add(new Alien(tileSize*26.5f, tileSize*14.5f, 26, 14, 2));
 
 	}
 	

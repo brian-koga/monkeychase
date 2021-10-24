@@ -531,8 +531,16 @@ class PlayingState extends BasicGameState {
 				// check if the banana is a bunch
 				if(temp.type == 'B') {
 					mg.score += 10;
-					mg.gorilla.active = true;
+
+					// if gorilla is currently active, just restart the time he is active for
 					mg.gorilla.timeToInactive = 500;
+
+					// if the gorilla is inactive, want to call him down on the monkey
+					if(!mg.gorilla.active) {
+						mg.gorilla.setTile(mg.monkey1.gridX, mg.monkey1.gridY);
+						mg.gorilla.setPosition(new Vector((mg.monkey1.gridX + 0.5f)*mg.tileSize, (mg.monkey1.gridY + 0.5f)*mg.tileSize));
+						mg.gorilla.active = true;
+					}
 				} else {
 					mg.score++;
 				}

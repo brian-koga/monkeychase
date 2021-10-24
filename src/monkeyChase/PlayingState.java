@@ -74,7 +74,10 @@ class PlayingState extends BasicGameState {
 				if(mg.bananaGrid[i][j] == 1) {
 					// don't want to add where the monkey spawns
 					if(!((i == 13 && j == 22) || (i == 14 && j == 22) || (i == 15 && j == 22) || (i == 14 && j == 21)))
-						mg.bananas.add(new Banana(mg.tileSize*(i + 0.5f), mg.tileSize*(j+ 0.5f), i, j));
+						mg.bananas.add(new Banana(mg.tileSize*(i + 0.5f), mg.tileSize*(j+ 0.5f), i, j, 'S'));
+				// banana bunches
+				} else if(mg.bananaGrid[i][j] == 2) {
+					mg.bananas.add(new Banana(mg.tileSize*(i + 0.5f), mg.tileSize*(j+ 0.5f), i, j, 'B'));
 				}
 			}
 		}
@@ -369,7 +372,7 @@ class PlayingState extends BasicGameState {
 		}
 	}
 
-	public void Dijkstra(MonkeyGame mg) {
+	public void Dijkstra(MonkeyGame mg, int sX, int sY) {
 
 		ArrayList<Tile> Q = new ArrayList<>();
 		ArrayList<Tile> S = new ArrayList<>();
@@ -410,8 +413,8 @@ class PlayingState extends BasicGameState {
 			}
 		}
 		//s is monkey location
-		mg.d[mg.monkey1.gridX][mg.monkey1.gridY] = 0;
-		mg.tileGrid[mg.monkey1.gridX][mg.monkey1.gridY].setD(0);
+		mg.d[sX][sY] = 0;
+		mg.tileGrid[sX][sY].setD(0);
 
 		while (!Q.isEmpty()) {
 			// extract min
@@ -452,6 +455,7 @@ class PlayingState extends BasicGameState {
 
 
 		/*
+
 		// draw grid
 		float x = 0;
 		float y = 0;
@@ -470,6 +474,8 @@ class PlayingState extends BasicGameState {
 		 */
 
 
+
+
 		// draw bananas
 		for(Banana temp : mg.bananas) {
 			temp.render(g);
@@ -483,13 +489,18 @@ class PlayingState extends BasicGameState {
 		// draw monkey
 		mg.monkey1.render(g);
 
+		// draw gorilla
+		if(mg.gorilla.active) {
+			mg.gorilla.render(g);
+		}
+
 		// draw trees
 		for(Tree temp : mg.trees) {
 			temp.render(g);
 		}
 
-		/*
 
+	/*
 		g.setColor(Color.cyan);
 		// dijkstra results
 		for(int i = 0; i < 29; i++) {
@@ -500,7 +511,9 @@ class PlayingState extends BasicGameState {
 			}
 		}
 
-		 */
+	 */
+
+
 
 	}
 
@@ -511,18 +524,38 @@ class PlayingState extends BasicGameState {
 		Input input = container.getInput();
 		MonkeyGame mg = (MonkeyGame)game;
 
-		// decide enemy movement
-		Dijkstra(mg);
+		// check bananas
+		for (Iterator<Banana> i = mg.bananas.iterator(); i.hasNext();) {
+			Banana temp = i.next();
+			if (mg.monkey1.gridX == temp.gridX && mg.monkey1.gridY == temp.gridY) {
+				// check if the banana is a bunch
+				if(temp.type == 'B') {
+					mg.score += 10;
+					mg.gorilla.active = true;
+					mg.gorilla.timeToInactive = 500;
+				} else {
+					mg.score++;
+				}
+				i.remove();
+			}
+		}
 
+		//if(mg.bananas.isEmpty()) {
+		// end game
+		//	mg.monkey1.stepSize = 0;
+		//}
 
-		for(Alien temp : mg.aliens) {
-			if(mg.d[temp.gridX][temp.gridY] != 0) {
-				int x = temp.gridX;
-				int y = temp.gridY;
-				char moveToMake = temp.lastMove;
+		// Handle gorilla
+		if(mg.gorilla.active) {
+			Dijkstra(mg, mg.aliens.get(0).gridX, mg.aliens.get(0).gridY);
 
-				float aXMod32 = temp.getX()%32;
-				float aYMod32 = temp.getY()%32;
+			if(mg.d[mg.gorilla.gridX][mg.gorilla.gridY] != 0) {
+				int x = mg.gorilla.gridX;
+				int y = mg.gorilla.gridY;
+				char moveToMake = mg.gorilla.lastMove;
+
+				float aXMod32 = mg.gorilla.getX()%32;
+				float aYMod32 = mg.gorilla.getY()%32;
 
 				//only allow a tile change if in the center
 				if((16 - aXMod32 == 0) && (16 - aYMod32 == 0)) {
@@ -543,6 +576,92 @@ class PlayingState extends BasicGameState {
 					if (mg.d[x][y + 1] < min) {
 						moveToMake = 'D';
 						min = mg.d[x][y + 1];
+					}
+				}
+
+				// make a move
+				if (moveToMake == 'L') {
+					mg.gorilla.translate(-1 * mg.gorilla.stepSize, 0);
+					mg.gorilla.lastMove = 'L';
+				} else if (moveToMake == 'R') {
+					mg.gorilla.translate(mg.gorilla.stepSize, 0);
+					mg.gorilla.lastMove = 'R';
+				} else if (moveToMake == 'U') {
+					mg.gorilla.translate(0, -1 * mg.gorilla.stepSize);
+					mg.gorilla.lastMove = 'U';
+				} else {
+					mg.gorilla.translate(0, mg.gorilla.stepSize);
+					mg.gorilla.lastMove = 'D';
+				}
+			}
+			// update gorilla
+			mg.gorilla.setTile((int)Math.floor(mg.gorilla.getX()/32), (int) Math.floor(mg.gorilla.getY()/32));
+			// reduce timeUntilInactive
+			mg.gorilla.timeToInactive--;
+			if(mg.gorilla.timeToInactive == 0) {
+				mg.gorilla.active = false;
+			}
+		}
+
+		// decide enemy movement
+		if(mg.gorilla.active) {
+			// gorilla is active so the aliens are in the flee state
+			Dijkstra(mg, mg.gorilla.gridX, mg.gorilla.gridY);
+		} else {
+			// gorilla is not active so the aliens are in the chase state
+			Dijkstra(mg, mg.monkey1.gridX, mg.monkey1.gridY);
+		}
+
+
+		for(Alien temp : mg.aliens) {
+			if(mg.d[temp.gridX][temp.gridY] != 0) {
+				int x = temp.gridX;
+				int y = temp.gridY;
+				char moveToMake = temp.lastMove;
+
+				float aXMod32 = temp.getX()%32;
+				float aYMod32 = temp.getY()%32;
+
+				//only allow a tile change if in the center
+				if((16 - aXMod32 == 0) && (16 - aYMod32 == 0)) {
+					if(mg.gorilla.active) {
+						int max = 0;
+						// check to the left
+						if (mg.d[x - 1][y] < 1000 && mg.d[x - 1][y] > max) {
+							moveToMake = 'L';
+							max = mg.d[x - 1][y];
+						}
+						if (mg.d[x + 1][y] < 1000 && mg.d[x + 1][y] > max) {
+							moveToMake = 'R';
+							max = mg.d[x + 1][y];
+						}
+						if (mg.d[x][y - 1] < 1000 && mg.d[x][y - 1] > max) {
+							moveToMake = 'U';
+							max = mg.d[x][y - 1];
+						}
+						if (mg.d[x][y + 1] < 1000 && mg.d[x][y + 1] > max) {
+							moveToMake = 'D';
+							max = mg.d[x][y + 1];
+						}
+					} else {
+						int min = 1000;
+						// check to the left
+						if (mg.d[x - 1][y] < min) {
+							moveToMake = 'L';
+							min = mg.d[x - 1][y];
+						}
+						if (mg.d[x + 1][y] < min) {
+							moveToMake = 'R';
+							min = mg.d[x + 1][y];
+						}
+						if (mg.d[x][y - 1] < min) {
+							moveToMake = 'U';
+							min = mg.d[x][y - 1];
+						}
+						if (mg.d[x][y + 1] < min) {
+							moveToMake = 'D';
+							min = mg.d[x][y + 1];
+						}
 					}
 				}
 
@@ -636,20 +755,6 @@ class PlayingState extends BasicGameState {
 
 		// update monkey
 		mg.monkey1.setTile((int)Math.floor(mg.monkey1.getX()/32), (int) Math.floor(mg.monkey1.getY()/32));
-
-		// check bananas
-		for (Iterator<Banana> i = mg.bananas.iterator(); i.hasNext();) {
-			Banana temp = i.next();
-			if (mg.monkey1.gridX == temp.gridX && mg.monkey1.gridY == temp.gridY) {
-				mg.score++;
-				i.remove();
-			}
-		}
-
-		//if(mg.bananas.isEmpty()) {
-			// end game
-		//	mg.monkey1.stepSize = 0;
-		//}
 
 	}
 

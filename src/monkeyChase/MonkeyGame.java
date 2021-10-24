@@ -59,7 +59,9 @@ public class MonkeyGame extends StateBasedGame {
 	//https://opengameart.org/content/minitrees
 	public static final String Monkey_RSC = "monkeyChase/resource/Monkey.png";
 	public static final String Banana_RSC = "monkeyChase/resource/Banana.png";
+	public static final String BananaBunch_RSC = "monkeyChase/resource/BananaBunch.png";
 	public static final String Alien_RSC = "monkeyChase/resource/Alien.png";
+	public static final String Gorilla_RSC = "monkeyChase/resource/Gorilla.png";
 
 
 
@@ -85,11 +87,13 @@ public class MonkeyGame extends StateBasedGame {
 	Tile[][] pi;
 
 	Monkey monkey1;
+
 	ArrayList<Tree> trees = new ArrayList<>();
 	ArrayList<Banana> bananas = new ArrayList<>();
 
 	ArrayList<Alien> aliens = new ArrayList<>();
 
+	Gorilla gorilla;
 
 	/**
 	 * Create the BounceGame frame, saving the width and height for later use.
@@ -146,13 +150,16 @@ public class MonkeyGame extends StateBasedGame {
 		ResourceManager.loadImage(Tree_RSC);
 		ResourceManager.loadImage(Monkey_RSC);
 		ResourceManager.loadImage(Banana_RSC);
+		ResourceManager.loadImage(BananaBunch_RSC);
 		ResourceManager.loadImage(Alien_RSC);
+		ResourceManager.loadImage(Gorilla_RSC);
 
 		monkey1 = new Monkey(tileSize*14.5f, tileSize*22.5f, 14, 22);
 
 		aliens.add(new Alien(tileSize*2.5f, tileSize*11.5f, 2, 11, 2));
 		aliens.add(new Alien(tileSize*26.5f, tileSize*14.5f, 26, 14, 2));
 
+		gorilla = new Gorilla(tileSize*26.5f, tileSize*14.5f, 26, 14, 2);
 	}
 	
 	public static void main(String[] args) {

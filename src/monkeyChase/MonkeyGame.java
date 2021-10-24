@@ -95,6 +95,8 @@ public class MonkeyGame extends StateBasedGame {
 
 	Gorilla gorilla;
 
+	boolean showDijkstra = false;
+
 	/**
 	 * Create the BounceGame frame, saving the width and height for later use.
 	 * 

@@ -454,24 +454,26 @@ class PlayingState extends BasicGameState {
 		g.drawString("Level: " + mg.level, 110, 30);
 
 
-		/*
 
-		// draw grid
-		float x = 0;
-		float y = 0;
 
-		for(int i = 0; i < 29; i++) {
-			g.drawLine(x, 0, x, mg.ScreenHeight);
-			x += mg.tileSize;
+		if(mg.showDijkstra) {
+			// draw grid
+			float x = 0;
+			float y = 0;
+
+			for (int i = 0; i < 29; i++) {
+				g.drawLine(x, 0, x, mg.ScreenHeight);
+				x += mg.tileSize;
+			}
+
+
+			for (int i = 0; i < 25; i++) {
+				g.drawLine(0, y, mg.ScreenWidth, y);
+				y += mg.tileSize;
+			}
 		}
 
 
-		for(int i = 0; i < 25; i++) {
-			g.drawLine(0, y, mg.ScreenWidth, y);
-			y += mg.tileSize;
-		}
-
-		 */
 
 
 
@@ -500,18 +502,20 @@ class PlayingState extends BasicGameState {
 		}
 
 
-	/*
-		g.setColor(Color.cyan);
-		// dijkstra results
-		for(int i = 0; i < 29; i++) {
-			for(int j = 0; j < 25; j++) {
-				if(mg.d[i][j] != 1000) {
-					g.drawString("" + mg.d[i][j], mg.tileSize * (i + 0.25f), mg.tileSize * (j + 0.25f));
+
+		if(mg.showDijkstra) {
+			g.setColor(Color.cyan);
+			// dijkstra results
+			for (int i = 0; i < 29; i++) {
+				for (int j = 0; j < 25; j++) {
+					if (mg.d[i][j] != 1000) {
+						g.drawString("" + mg.d[i][j], mg.tileSize * (i + 0.25f), mg.tileSize * (j + 0.25f));
+					}
 				}
 			}
 		}
 
-	 */
+
 
 
 
@@ -523,6 +527,10 @@ class PlayingState extends BasicGameState {
 
 		Input input = container.getInput();
 		MonkeyGame mg = (MonkeyGame)game;
+
+		if (input.isKeyPressed(Input.KEY_0)) {
+			mg.showDijkstra = !mg.showDijkstra;
+		}
 
 		// check bananas
 		for (Iterator<Banana> i = mg.bananas.iterator(); i.hasNext();) {
@@ -540,6 +548,19 @@ class PlayingState extends BasicGameState {
 						mg.gorilla.setTile(mg.monkey1.gridX, mg.monkey1.gridY);
 						mg.gorilla.setPosition(new Vector((mg.monkey1.gridX + 0.5f)*mg.tileSize, (mg.monkey1.gridY + 0.5f)*mg.tileSize));
 						mg.gorilla.active = true;
+
+						// change all aliens last move to allow a turn around
+						for(Alien a : mg.aliens) {
+							if(a.lastMove == 'L') {
+								a.lastMove = 'R';
+							} else if(a.lastMove == 'R') {
+								a.lastMove = 'L';
+							} else if(a.lastMove == 'U') {
+								a.lastMove = 'D';
+							} else {
+								a.lastMove = 'U';
+							}
+						}
 					}
 				} else {
 					mg.score++;
@@ -630,24 +651,24 @@ class PlayingState extends BasicGameState {
 				float aXMod32 = temp.getX()%32;
 				float aYMod32 = temp.getY()%32;
 
-				//only allow a tile change if in the center
+				//only allow a tile change if in the center, but don't allow the alien to turn around
 				if((16 - aXMod32 == 0) && (16 - aYMod32 == 0)) {
 					if(mg.gorilla.active) {
 						int max = 0;
 						// check to the left
-						if (mg.d[x - 1][y] < 1000 && mg.d[x - 1][y] > max) {
+						if (mg.d[x - 1][y] < 1000 && mg.d[x - 1][y] > max && temp.lastMove != 'R') {
 							moveToMake = 'L';
 							max = mg.d[x - 1][y];
 						}
-						if (mg.d[x + 1][y] < 1000 && mg.d[x + 1][y] > max) {
+						if (mg.d[x + 1][y] < 1000 && mg.d[x + 1][y] > max && temp.lastMove != 'L') {
 							moveToMake = 'R';
 							max = mg.d[x + 1][y];
 						}
-						if (mg.d[x][y - 1] < 1000 && mg.d[x][y - 1] > max) {
+						if (mg.d[x][y - 1] < 1000 && mg.d[x][y - 1] > max && temp.lastMove != 'D') {
 							moveToMake = 'U';
 							max = mg.d[x][y - 1];
 						}
-						if (mg.d[x][y + 1] < 1000 && mg.d[x][y + 1] > max) {
+						if (mg.d[x][y + 1] < 1000 && mg.d[x][y + 1] > max && temp.lastMove != 'U') {
 							moveToMake = 'D';
 							max = mg.d[x][y + 1];
 						}

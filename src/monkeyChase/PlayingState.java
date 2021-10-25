@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.util.*;
 import java.lang.Math;
 
-import jig.ResourceManager;
 import jig.Vector;
 
 import org.newdawn.slick.*;
@@ -25,6 +24,7 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 class PlayingState extends BasicGameState {
 	int levelNumber;
+	boolean justDied = true;
 
 	
 	@Override
@@ -44,6 +44,8 @@ class PlayingState extends BasicGameState {
 		if(levelNumber == 1) {
 			setupLevel1(mg);
 		}
+
+		setStartingPositions(mg);
 
 		// populate tile grid
 		for(int i = 0; i < 29; i++) {
@@ -442,6 +444,19 @@ class PlayingState extends BasicGameState {
 		}
 	}
 
+	public void setStartingPositions(MonkeyGame mg) {
+		// reset the entities
+		mg.monkey1.setPosition(new Vector(mg.tileSize*14.5f, mg.tileSize*22.5f));
+		mg.monkey1.setTile(14,22);
+
+		mg.aliens.get(0).setPosition(new Vector(mg.tileSize*2.5f, mg.tileSize*11.5f));
+		mg.aliens.get(0).setTile(2, 11);
+		mg.aliens.get(1).setPosition(new Vector(mg.tileSize*26.5f, mg.tileSize*14.5f));
+		mg.aliens.get(1).setTile(26, 14);
+
+		mg.gorilla.active = false;
+	}
+
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game,
@@ -528,6 +543,26 @@ class PlayingState extends BasicGameState {
 		Input input = container.getInput();
 		MonkeyGame mg = (MonkeyGame)game;
 
+		// force going to game over screen, set lives to 0
+		if(input.isKeyPressed(Input.KEY_9)) {
+			setStartingPositions(mg);
+			mg.level = 1;
+			mg.lives = 0;
+			mg.trees = new ArrayList<>();
+			mg.bananas = new ArrayList<>();
+			((GameOverState)game.getState(MonkeyGame.GAMEOVERSTATE)).setUserScore(mg.score);
+			game.enterState(MonkeyGame.GAMEOVERSTATE);
+		}
+
+		// if just died, want to wait for space
+		if(justDied) {
+			if((input.isKeyPressed(Input.KEY_SPACE))) {
+				// start game
+				justDied = false;
+			}
+			return;
+		}
+
 		if (input.isKeyPressed(Input.KEY_0)) {
 			mg.showDijkstra = !mg.showDijkstra;
 		}
@@ -569,10 +604,13 @@ class PlayingState extends BasicGameState {
 			}
 		}
 
-		//if(mg.bananas.isEmpty()) {
+		if(mg.bananas.isEmpty()) {
 		// end game
-		//	mg.monkey1.stepSize = 0;
-		//}
+			mg.trees = new ArrayList<>();
+			mg.bananas = new ArrayList<>();
+			((GameOverState)game.getState(MonkeyGame.GAMEOVERSTATE)).setUserScore(mg.score);
+			game.enterState(MonkeyGame.GAMEOVERSTATE);
+		}
 
 		// Handle gorilla
 		if(mg.gorilla.active) {
@@ -788,8 +826,16 @@ class PlayingState extends BasicGameState {
 		// check capture
 		for(Alien a : mg.aliens) {
 			if(mg.monkey1.gridX == a.gridX && mg.monkey1.gridY == a.gridY) {
-				((GameOverState)game.getState(MonkeyGame.GAMEOVERSTATE)).setUserScore(mg.score);
-				game.enterState(MonkeyGame.GAMEOVERSTATE);
+				mg.lives--;
+				setStartingPositions(mg);
+
+				if (mg.lives == 0) {
+					mg.trees = new ArrayList<>();
+					mg.bananas = new ArrayList<>();
+					((GameOverState)game.getState(MonkeyGame.GAMEOVERSTATE)).setUserScore(mg.score);
+					game.enterState(MonkeyGame.GAMEOVERSTATE);
+				}
+				justDied = true;
 			}
 		}
 

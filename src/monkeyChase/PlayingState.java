@@ -547,8 +547,28 @@ class PlayingState extends BasicGameState {
 		Input input = container.getInput();
 		MonkeyGame mg = (MonkeyGame)game;
 
+		// cheats
+		if (input.isKeyPressed(Input.KEY_1)) {
+			setStartingPositions(mg);
+			mg.level = 1;
+			mg.trees = new ArrayList<>();
+			mg.bananas = new ArrayList<>();
+			game.enterState(MonkeyGame.PLAYINGSTATE);
+			// have to return here, otherwise, weirdly it runs through the rest of the function
+			// and since bananas are empty it will trigger the level over state instead
+			return;
+		// start level 2
+		} else if (input.isKeyPressed(Input.KEY_2)) {
+			setStartingPositions(mg);
+			mg.level = 2;
+			mg.trees = new ArrayList<>();
+			mg.bananas = new ArrayList<>();
+			game.enterState(MonkeyGame.PLAYINGSTATE);
+			// have to return here, otherwise, weirdly it runs through the rest of the function
+			// and since bananas are empty it will trigger the level over state instead
+			return;
 		// force going to game over screen, set lives to 0
-		if(input.isKeyPressed(Input.KEY_9)) {
+		} else if(input.isKeyPressed(Input.KEY_9)) {
 			setStartingPositions(mg);
 			mg.level = 1;
 			mg.lives = 0;

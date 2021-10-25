@@ -11,9 +11,9 @@
 - **[10]** Add pathfinding for gorilla
 - **[11]** Add capturing for monkey
 - **[12]** Handle losing lives
-
+- **[13]** Add levels / level progression
 
 ## Open Issues ##
-- **[13]** Add levels / level progression
-- **[14]** Add personalized splash screen
-- **[15]** Add cheats
+- **[14]** Add cheats
+- **[15]** Add personalized splash screen
+

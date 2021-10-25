@@ -785,6 +785,14 @@ class PlayingState extends BasicGameState {
 		// update monkey
 		mg.monkey1.setTile((int)Math.floor(mg.monkey1.getX()/32), (int) Math.floor(mg.monkey1.getY()/32));
 
+		// check capture
+		for(Alien a : mg.aliens) {
+			if(mg.monkey1.gridX == a.gridX && mg.monkey1.gridY == a.gridY) {
+				((GameOverState)game.getState(MonkeyGame.GAMEOVERSTATE)).setUserScore(mg.score);
+				game.enterState(MonkeyGame.GAMEOVERSTATE);
+			}
+		}
+
 	}
 
 	@Override

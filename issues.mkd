@@ -9,10 +9,10 @@
 - **[8]** Add pathfinding for aliens
 - **[9]** Add gorilla
 - **[10]** Add pathfinding for gorilla
+- **[11]** Add capturing for monkey
 
 
 ## Open Issues ##
-- **[11]** Add capturing for monkey
 - **[12]** Handle losing lives
 - **[13]** Add levels / level progression
 - **[14]** Add personalized splash screen

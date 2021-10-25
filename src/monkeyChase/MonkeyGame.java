@@ -77,7 +77,7 @@ public class MonkeyGame extends StateBasedGame {
 
 	int tileSize;
 
-	int maxLevel = 3;
+	int maxLevel = 2;
 
 	int[][] grid;
 	int[][] bananaGrid;

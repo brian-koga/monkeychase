@@ -58,34 +58,22 @@ class GameOverState extends BasicGameState {
 				mg.ScreenHeight*0.25f);
 
 		// simulate choosing an option, this is based on the menuItem variable
-		// it can be 0, 1 or 2. if it is 0, the start over is focused, if it is 1, the hard mode is focused
-		// and if it is 2, then main menu is focused
+		// it can be 0 or. if it is 0, the start over is focused, if it is 1, main menu is focused
 		if(menuItem == 0) {
 			if(mg.lives <= 0) {
 				g.drawString("< New Game >", mg.ScreenWidth/2 -35, mg.ScreenHeight/2 -20);
 			} else {
 				g.drawString("< Keep Playing >", mg.ScreenWidth / 2 - 35, mg.ScreenHeight / 2 - 20);
 			}
-			g.drawString("  Hard Mode  ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
-			g.drawString("  Main Menu ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2 + 20));
-		// hard mode focused
+			g.drawString("  Main Menu ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
+		// main menu focused
 		} else if(menuItem == 1) {
 			if(mg.lives <= 0) {
 				g.drawString("  New Game  ", mg.ScreenWidth/2 -35, mg.ScreenHeight/2 -20);
 			} else {
 				g.drawString("  Keep Playing  ", mg.ScreenWidth / 2 - 35, mg.ScreenHeight / 2 - 20);
 			}
-			g.drawString("< Hard Mode >", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
-			g.drawString("  Main Menu  ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2 + 20));
-		// main menu focused
-		} else if(menuItem == 2) {
-			if(mg.lives <= 0) {
-				g.drawString("  New Game  ", mg.ScreenWidth/2 -35, mg.ScreenHeight/2 -20);
-			} else {
-				g.drawString("  Keep Playing  ", mg.ScreenWidth / 2 - 35, mg.ScreenHeight / 2 - 20);
-			}
-			g.drawString("  Hard Mode  ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
-			g.drawString("< Main Menu >", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2 + 20));
+			g.drawString("< Main Menu >", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
 		}
 	}
 
@@ -117,7 +105,7 @@ class GameOverState extends BasicGameState {
 			mg.level = 2;
 			game.enterState(MonkeyGame.PLAYINGSTATE);
 			// start level 3
-		} else if (input.isKeyPressed(Input.KEY_3)) {
+		} /*else if (input.isKeyPressed(Input.KEY_3)) {
 			// if lives is 0, reset to 3 and reset the score
 			if(mg.lives <= 0) {
 				mg.lives = 3;
@@ -127,17 +115,18 @@ class GameOverState extends BasicGameState {
 			mg.level = 3;
 			game.enterState(MonkeyGame.PLAYINGSTATE);
 		}
+		*/
 
 		// menu item is 0 or 1, either way, the w and s behavior are the same
 		if (input.isKeyPressed(Input.KEY_S)) {
 			menuItem++;
-			if (menuItem == 3) {
+			if (menuItem == 2) {
 				menuItem = 0;
 			}
 		} else if (input.isKeyPressed(Input.KEY_W)) {
 			menuItem--;
 			if (menuItem == -1) {
-				menuItem = 2;
+				menuItem = 1;
 			}
 		} else if (input.isKeyPressed(Input.KEY_SPACE)) {
 			// if lives is 0, reset to 3 and reset the score
@@ -151,15 +140,10 @@ class GameOverState extends BasicGameState {
 				// start level 1
 				mg.level = 1;
 				mg.enterState(MonkeyGame.PLAYINGSTATE);
-			} else if(menuItem == 1){
-				// enter level 1 in hard mode
-				mg.level = 1;
-				mg.enterState(MonkeyGame.PLAYINGSTATE);
 			} else {
 				game.enterState(MonkeyGame.STARTUPSTATE, new EmptyTransition(), new HorizontalSplitTransition() );
 			}
 		}
-		
 		
 		timer -= delta;
 		if (timer <= 0)

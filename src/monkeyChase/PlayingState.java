@@ -41,8 +41,12 @@ class PlayingState extends BasicGameState {
 		// setup level
 		levelNumber = mg.level;
 
+		justDied = true;
+
 		if(levelNumber == 1) {
-			setupLevel1(mg);
+			setupLevel(mg, "monkeyChase/src/monkeyChase/resource/Level1.txt");
+		} else if(levelNumber == 2) {
+			setupLevel(mg, "monkeyChase/src/monkeyChase/resource/Level2.txt");
 		}
 
 		setStartingPositions(mg);
@@ -86,9 +90,9 @@ class PlayingState extends BasicGameState {
 
 	}
 
-	public void setupLevel1(MonkeyGame mg) {
+	public void setupLevel(MonkeyGame mg, String path) {
 		try {
-			File f = new File("monkeyChase/src/monkeyChase/resource/Level1.txt");
+			File f = new File(path);
 			Scanner scan = new Scanner(f);
 			int j = 0;
 			while (scan.hasNextLine()) {
@@ -552,6 +556,9 @@ class PlayingState extends BasicGameState {
 			mg.bananas = new ArrayList<>();
 			((GameOverState)game.getState(MonkeyGame.GAMEOVERSTATE)).setUserScore(mg.score);
 			game.enterState(MonkeyGame.GAMEOVERSTATE);
+			// have to return here, otherwise, weirdly it runs through the rest of the function
+			// and since bananas are empty it will trigger the level over state instead
+			return;
 		}
 
 		// if just died, want to wait for space
@@ -605,11 +612,15 @@ class PlayingState extends BasicGameState {
 		}
 
 		if(mg.bananas.isEmpty()) {
-		// end game
+			// end of level
 			mg.trees = new ArrayList<>();
 			mg.bananas = new ArrayList<>();
-			((GameOverState)game.getState(MonkeyGame.GAMEOVERSTATE)).setUserScore(mg.score);
-			game.enterState(MonkeyGame.GAMEOVERSTATE);
+			if (mg.level != mg.maxLevel) {
+				game.enterState(MonkeyGame.LEVELOVERSTATE);
+			} else {
+				((GameOverState)game.getState(MonkeyGame.GAMEOVERSTATE)).setUserScore(mg.score);
+				game.enterState(MonkeyGame.GAMEOVERSTATE);
+			}
 		}
 
 		// Handle gorilla
@@ -836,6 +847,7 @@ class PlayingState extends BasicGameState {
 					game.enterState(MonkeyGame.GAMEOVERSTATE);
 				}
 				justDied = true;
+				mg.showDijkstra = false;
 			}
 		}
 

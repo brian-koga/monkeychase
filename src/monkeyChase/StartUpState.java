@@ -55,47 +55,42 @@ class StartUpState extends BasicGameState {
 
 
 		// simulate choosing an option, this is based on the menuItem variable
-		// it can be 0, 1, 2 or 3. if it is 0, the start is focused, if it is 1, the level is focused
-		// if it is 2, demo is focused and if it is 2, then the person is choosing levels
+		// it can be 0, 1, or 2. if it is 0, the start is focused, if it is 1, the level is focused
+		// and if it is 2, then the person is choosing levels
 
 		if(menuItem == 0) {
 			g.drawString("< Start >", mg.ScreenWidth/2 -30, mg.ScreenHeight/2 -20);
 			g.drawString("  Levels ", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2 + 20));
-			g.drawString("   Demo  ", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2 + 60));
 		// levels focused
 		} else if(menuItem == 1) {
 			g.drawString("  Start  ", mg.ScreenWidth / 2 - 30, mg.ScreenHeight / 2 - 20);
 			g.drawString("< Levels >", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2 + 20));
-			g.drawString("   Demo  ", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2 + 60));
 		// in the level select menu
 		} else if (menuItem == 2) {
-			g.drawString("  Start  ", mg.ScreenWidth / 2 - 30, mg.ScreenHeight / 2 - 20);
-			g.drawString("  Levels  ", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2 + 20));
-			g.drawString("<  Demo >", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2 + 60));
-		} else if (menuItem == 3) {
 			// level 1 focused
 			if (levelMenuItem == 1) {
 				g.drawString("< Level 1 >", mg.ScreenWidth / 2 - 30, mg.ScreenHeight / 2 - 20);
 				g.drawString("  Level 2  ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2));
-				g.drawString("  Level 3  ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
-				g.drawString("   Back   ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 40));
+				//g.drawString("  Level 3  ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
+				g.drawString("   Back   ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
 				// level 2 focused
 			} else if (levelMenuItem == 2) {
 				g.drawString("  Level 1  ", mg.ScreenWidth / 2 - 30, mg.ScreenHeight / 2 - 20);
 				g.drawString("< Level 2 >", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2));
-				g.drawString("  Level 3  ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
-				g.drawString("   Back   ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 40));
+				//g.drawString("  Level 3  ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
+				g.drawString("   Back   ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
 				// level 3 focused
-			} else if (levelMenuItem == 3) {
+			/*} else if (levelMenuItem == 3) {
 				g.drawString("  Level 1  ", mg.ScreenWidth / 2 - 30, mg.ScreenHeight / 2 - 20);
 				g.drawString("  Level 2  ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2));
 				g.drawString("< Level 3 >", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
 				g.drawString("   Back   ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 40));
+				*/
 			} else if (levelMenuItem == 0) {
 				g.drawString("  Level 1  ", mg.ScreenWidth / 2 - 30, mg.ScreenHeight / 2 - 20);
 				g.drawString("  Level 2  ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2));
-				g.drawString("  Level 3  ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
-				g.drawString(" < Back > ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 40));
+				//g.drawString("  Level 3  ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
+				g.drawString(" < Back > ", mg.ScreenWidth / 2 - 30, (mg.ScreenHeight / 2 + 20));
 			}
 		}
 	}
@@ -116,25 +111,28 @@ class StartUpState extends BasicGameState {
 			mg.level = 2;
 			game.enterState(MonkeyGame.PLAYINGSTATE);
 			// start level 3
-		} else if (input.isKeyPressed(Input.KEY_3)) {
+		/*} else if (input.isKeyPressed(Input.KEY_3)) {
 			mg.level = 3;
 			game.enterState(MonkeyGame.PLAYINGSTATE);
+
+		 */
 		}
+
 
 		// in the level select menu
 		// here, the options are which level to start on and a back
-		if(menuItem == 3) {
+		if(menuItem == 2) {
 			// move the selector down
 			if (input.isKeyPressed(Input.KEY_S)) {
 				levelMenuItem++;
-				if (levelMenuItem == 4) {
+				if (levelMenuItem == 3) {
 					levelMenuItem = 0;
 				}
 			// move the selector up
 			} else if (input.isKeyPressed(Input.KEY_W)) {
 				levelMenuItem--;
 				if (levelMenuItem == -1) {
-					levelMenuItem = 3;
+					levelMenuItem = 2;
 				}
 			// choose an option
 			} else if (input.isKeyPressed(Input.KEY_SPACE)) {
@@ -154,13 +152,13 @@ class StartUpState extends BasicGameState {
 			// menu item is 0 or 1 or 2, either way, the w and s behavior are the same
 			if (input.isKeyPressed(Input.KEY_S)) {
 				menuItem++;
-				if (menuItem == 3) {
+				if (menuItem == 2) {
 					menuItem = 0;
 				}
 			} else if (input.isKeyPressed(Input.KEY_W)) {
 				menuItem--;
 				if (menuItem == -1) {
-					menuItem = 2;
+					menuItem = 1;
 				}
 			} else if (input.isKeyPressed(Input.KEY_SPACE)) {
 				// if space is pressed, different things occur
@@ -170,7 +168,7 @@ class StartUpState extends BasicGameState {
 					mg.enterState(MonkeyGame.PLAYINGSTATE);
 				} else if(menuItem == 1){
 					// enter level select menu
-					menuItem = 3;
+					menuItem = 2;
 				} else {
 					// start demo
 					mg.level = 1;

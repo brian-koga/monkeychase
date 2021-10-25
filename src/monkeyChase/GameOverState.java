@@ -54,38 +54,38 @@ class GameOverState extends BasicGameState {
 		MonkeyGame mg = (MonkeyGame)game;
 		g.drawString("Score: " + mg.score, 10, 30);
 
-		g.drawImage(ResourceManager.getImage(MonkeyGame.GAMEOVER_BANNER_RSC), 225,
-				170);
+		g.drawImage(ResourceManager.getImage(MonkeyGame.GAMEOVER_BANNER_RSC), mg.ScreenWidth*0.33f,
+				mg.ScreenHeight*0.25f);
 
 		// simulate choosing an option, this is based on the menuItem variable
 		// it can be 0, 1 or 2. if it is 0, the start over is focused, if it is 1, the hard mode is focused
 		// and if it is 2, then main menu is focused
 		if(menuItem == 0) {
 			if(mg.lives <= 0) {
-				g.drawString("< New Game >", mg.ScreenWidth/2 -30, mg.ScreenHeight/2 -20);
+				g.drawString("< New Game >", mg.ScreenWidth/2 -35, mg.ScreenHeight/2 -20);
 			} else {
-				g.drawString("< Keep Playing >", mg.ScreenWidth / 2 - 30, mg.ScreenHeight / 2 - 20);
+				g.drawString("< Keep Playing >", mg.ScreenWidth / 2 - 35, mg.ScreenHeight / 2 - 20);
 			}
-			g.drawString("  Hard Mode  ", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2));
-			g.drawString("  Main Menu ", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2 + 20));
+			g.drawString("  Hard Mode  ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
+			g.drawString("  Main Menu ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2 + 20));
 		// hard mode focused
 		} else if(menuItem == 1) {
 			if(mg.lives <= 0) {
-				g.drawString("  New Game  ", mg.ScreenWidth/2 -30, mg.ScreenHeight/2 -20);
+				g.drawString("  New Game  ", mg.ScreenWidth/2 -35, mg.ScreenHeight/2 -20);
 			} else {
-				g.drawString("  Keep Playing  ", mg.ScreenWidth / 2 - 30, mg.ScreenHeight / 2 - 20);
+				g.drawString("  Keep Playing  ", mg.ScreenWidth / 2 - 35, mg.ScreenHeight / 2 - 20);
 			}
-			g.drawString("< Hard Mode >", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2));
-			g.drawString("  Main Menu  ", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2 + 20));
+			g.drawString("< Hard Mode >", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
+			g.drawString("  Main Menu  ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2 + 20));
 		// main menu focused
 		} else if(menuItem == 2) {
 			if(mg.lives <= 0) {
-				g.drawString("  New Game  ", mg.ScreenWidth/2 -30, mg.ScreenHeight/2 -20);
+				g.drawString("  New Game  ", mg.ScreenWidth/2 -35, mg.ScreenHeight/2 -20);
 			} else {
-				g.drawString("  Keep Playing  ", mg.ScreenWidth / 2 - 30, mg.ScreenHeight / 2 - 20);
+				g.drawString("  Keep Playing  ", mg.ScreenWidth / 2 - 35, mg.ScreenHeight / 2 - 20);
 			}
-			g.drawString("  Hard Mode  ", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2));
-			g.drawString("< Main Menu >", mg.ScreenWidth/2 - 30, (mg.ScreenHeight/2 + 20));
+			g.drawString("  Hard Mode  ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
+			g.drawString("< Main Menu >", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2 + 20));
 		}
 	}
 

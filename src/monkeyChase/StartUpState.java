@@ -52,6 +52,9 @@ class StartUpState extends BasicGameState {
 
 		g.drawString("Brian Koga", 10, mg.ScreenHeight -20);
 
+		g.drawImage(ResourceManager.getImage(MonkeyGame.Title_RSC), 164,
+				mg.ScreenHeight*0.15f);
+
 
 
 		// simulate choosing an option, this is based on the menuItem variable

@@ -10,9 +10,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 /**
- * This state is active between levels. In this state, sound is
- * turned off. The user can only interact with the game by pressing the
- * SPACE key which allows the user to continue to the next level
+ * This state is active between levels. The user can only interact with
+ * the game by pressing the SPACE key which allows the user to continue
+ * to the next level
  *
  *
  * Transitions From PlayingState

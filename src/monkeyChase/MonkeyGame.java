@@ -13,33 +13,27 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- * A Simple Game of Breakout.
+ *
  * 
- * The game has four states: StartUp, Playing, and GameOver, LevelOver the game
+ * The game has four states: StartUp, Playing, GameOver, LevelOver the game
  * progresses through these states based on the user's input and the events that
  * occur. Each state is different in terms of what is displayed and
  * what input is accepted.
  * 
- * In the playing state, the game displays a moving rectangular "ball" that
- * bounces off the sides of the game container and the blocks that are spawned
- * based on which level. The user controls a paddle at the bottom of the screen.
- * If the ball falls off the bottom of the screen, a life is lost and the ball
- * respawns on top of the paddle. If there are no lives left, the game over state
- * is entered.
+ * In the playing state, the game displays a controllable monkey being chased by
+ * aliens. The player's goal is to eat all of the bananas and avoid being caught
+ * by the aliens. If the aliens catch the player, a life is lost. If there are no
+ * lives left, the game over state is entered.
  * 
- * When the ball bounces, it appears broken for a short time afterwards and an
- * explosion animation is played at the impact site to add a bit of eye-candy
- * additionally, we play a short explosion sound effect when the game is
- * actively being played.
+ * When the bunch of bananas is eaten a gorilla is summoned at the player's location
+ * that chases the aliens away.
  * 
- * The game also tracks the number of blocks that have been destroyed and syncs
+ * The game also tracks the number of bananas that have been eaten and syncs
  * the game update loop with the monitor's refresh rate.
  * 
- * Graphics resources courtesy of qubodup:
- * http://opengameart.org/content/bomb-explosion-animation
- * 
- * Sound resources courtesy of DJ Chronos:
- * http://www.freesound.org/people/DJ%20Chronos/sounds/123236/
+ * tree resources courtesy of Tiao Ferreira:
+ * https://opengameart.org/content/minitrees
+ *
  * 
  * 
  * @authors Brian Koga
@@ -56,7 +50,6 @@ public class MonkeyGame extends StateBasedGame {
 	public static final String STARTUP_BANNER_RSC = "monkeyChase/resource/PressSpace.png";
 
 	public static final String Tree_RSC = "monkeyChase/resource/minitree.png";
-	//https://opengameart.org/content/minitrees
 	public static final String Monkey_RSC = "monkeyChase/resource/Monkey.png";
 	public static final String Banana_RSC = "monkeyChase/resource/Banana.png";
 	public static final String BananaBunch_RSC = "monkeyChase/resource/BananaBunch.png";
@@ -103,7 +96,7 @@ public class MonkeyGame extends StateBasedGame {
 	boolean showDijkstra = false;
 
 	/**
-	 * Create the BounceGame frame, saving the width and height for later use.
+	 * Create the MonkeyGame frame, saving the width and height for later use, as well as other properties.
 	 * 
 	 * @param title
 	 *            the window's title
@@ -143,12 +136,7 @@ public class MonkeyGame extends StateBasedGame {
 		addState(new GameOverState());
 		addState(new PlayingState());
 		addState(new LevelOverState());
-		
-		// the sound resource takes a particularly long time to load,
-		// we preload it here to (1) reduce latency when we first play it
-		// and (2) because loading it will load the audio libraries and
-		// unless that is done now, we can't *disable* sound as we
-		// attempt to do in the startUp() method.
+
 
 		// preload all the resources to avoid warnings & minimize latency...
 		ResourceManager.loadImage(GAMEOVER_BANNER_RSC);

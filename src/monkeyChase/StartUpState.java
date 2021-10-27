@@ -13,10 +13,9 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
 /**
- * This state is active prior to the Game starting. In this state, sound is
- * turned off. The user can only interact with the game by pressing the
- * w, s or SPACE keys which allows the selection of a level, then transitions
- * to the Playing State.
+ * This state is active prior to the Game starting. The user can only interact
+ * with the game by pressing the w, s or SPACE keys which allows the selection
+ * of a level, then transitions to the Playing State.
  *
  * 
  * Transitions From (Initialization), GameOverState

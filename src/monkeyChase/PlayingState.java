@@ -13,10 +13,10 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 /**
- * This state is active when the Game is being played. In this state, sound is
- * turned on, and the user can control the paddle using the WAS & D keys. If the ball
- * falls out the bottom, a life is deducted and a new ball can be launched from the paddle.
- * If there are no lives left, the game is over. If there are no blocks left, the level is over
+ * This state is active when the Game is being played. In this state, the user can control the
+ * monkey using the W A S & D keys. If the monkey is caught by the aliens, a life is deducted,
+ * the entities are reset, and the game can be resumed by pressing space.
+ * If there are no lives left, the game is over. If there are no bananas left, the level is over
  * 
  * Transitions From StartUpState, LevelOverState
  * 

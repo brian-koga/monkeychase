@@ -571,7 +571,7 @@ class PlayingState extends BasicGameState {
 		} else if(input.isKeyPressed(Input.KEY_9)) {
 			setStartingPositions(mg);
 			mg.level = 1;
-			mg.lives = 0;
+			//mg.lives = 0;
 			mg.trees = new ArrayList<>();
 			mg.bananas = new ArrayList<>();
 			((GameOverState)game.getState(MonkeyGame.GAMEOVERSTATE)).setUserScore(mg.score);

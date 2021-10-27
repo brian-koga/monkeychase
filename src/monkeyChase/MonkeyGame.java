@@ -63,6 +63,11 @@ public class MonkeyGame extends StateBasedGame {
 	public static final String Alien_RSC = "monkeyChase/resource/Alien.png";
 	public static final String Gorilla_RSC = "monkeyChase/resource/Gorilla.png";
 
+	public static final String Title_RSC = "monkeyChase/resource/Title.png";
+	public static final String YouWin_RSC = "monkeyChase/resource/You-Win.png";
+	public static final String GameOver_RSC = "monkeyChase/resource/Game-Over.png";
+
+
 
 
 
@@ -156,6 +161,10 @@ public class MonkeyGame extends StateBasedGame {
 		ResourceManager.loadImage(Alien_RSC);
 		ResourceManager.loadImage(Gorilla_RSC);
 
+		ResourceManager.loadImage(Title_RSC);
+		ResourceManager.loadImage(YouWin_RSC);
+		ResourceManager.loadImage(GameOver_RSC);
+
 		monkey1 = new Monkey(tileSize*14.5f, tileSize*22.5f, 14, 22);
 
 		aliens.add(new Alien(tileSize*2.5f, tileSize*11.5f, 2, 11, 2));
@@ -170,6 +179,7 @@ public class MonkeyGame extends StateBasedGame {
 			app = new AppGameContainer(new MonkeyGame("Monkey See, Monkey Run!", 928, 800));
 			app.setDisplayMode(928, 800, false);
 			app.setVSync(true);
+			app.setTargetFrameRate(60);
 			app.start();
 		} catch (SlickException e) {
 			e.printStackTrace();

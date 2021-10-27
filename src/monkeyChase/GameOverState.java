@@ -54,8 +54,13 @@ class GameOverState extends BasicGameState {
 		MonkeyGame mg = (MonkeyGame)game;
 		g.drawString("Score: " + mg.score, 10, 30);
 
-		g.drawImage(ResourceManager.getImage(MonkeyGame.GAMEOVER_BANNER_RSC), mg.ScreenWidth*0.33f,
-				mg.ScreenHeight*0.25f);
+		if(mg.lives > 0) {
+			g.drawImage(ResourceManager.getImage(MonkeyGame.YouWin_RSC), 228.5f,
+					mg.ScreenHeight*0.25f);
+		} else {
+			g.drawImage(ResourceManager.getImage(MonkeyGame.GameOver_RSC), 163f,
+					mg.ScreenHeight * 0.25f);
+		}
 
 		// simulate choosing an option, this is based on the menuItem variable
 		// it can be 0 or. if it is 0, the start over is focused, if it is 1, main menu is focused
@@ -63,7 +68,7 @@ class GameOverState extends BasicGameState {
 			if(mg.lives <= 0) {
 				g.drawString("< New Game >", mg.ScreenWidth/2 -35, mg.ScreenHeight/2 -20);
 			} else {
-				g.drawString("< Keep Playing >", mg.ScreenWidth / 2 - 35, mg.ScreenHeight / 2 - 20);
+				g.drawString("< Keep Playing >", mg.ScreenWidth / 2 - 45, mg.ScreenHeight / 2 - 20);
 			}
 			g.drawString("  Main Menu ", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
 		// main menu focused
@@ -71,7 +76,7 @@ class GameOverState extends BasicGameState {
 			if(mg.lives <= 0) {
 				g.drawString("  New Game  ", mg.ScreenWidth/2 -35, mg.ScreenHeight/2 -20);
 			} else {
-				g.drawString("  Keep Playing  ", mg.ScreenWidth / 2 - 35, mg.ScreenHeight / 2 - 20);
+				g.drawString("  Keep Playing  ", mg.ScreenWidth / 2 - 45, mg.ScreenHeight / 2 - 20);
 			}
 			g.drawString("< Main Menu >", mg.ScreenWidth/2 - 35, (mg.ScreenHeight/2));
 		}

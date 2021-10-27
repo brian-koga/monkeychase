@@ -43,8 +43,10 @@ public class LevelOverState extends BasicGameState{
         g.drawString("Lives: " + mg.lives, 10, 30);
         g.drawString("Score: " + mg.score, 110, 10);
         g.drawString("Level: " + mg.level, 110, 30);
+        g.drawImage(ResourceManager.getImage(MonkeyGame.LevelComplete_RSC), 163f,
+                mg.ScreenHeight * 0.25f);
         g.drawImage(ResourceManager.getImage(MonkeyGame.STARTUP_BANNER_RSC),
-                225, 270);
+                325, 370);
 
     }
 

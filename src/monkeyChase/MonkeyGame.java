@@ -66,7 +66,7 @@ public class MonkeyGame extends StateBasedGame {
 	public static final String Title_RSC = "monkeyChase/resource/Title.png";
 	public static final String YouWin_RSC = "monkeyChase/resource/You-Win.png";
 	public static final String GameOver_RSC = "monkeyChase/resource/Game-Over.png";
-
+	public static final String LevelComplete_RSC = "monkeyChase/resource/Level-Complete.png";
 
 
 
@@ -164,6 +164,7 @@ public class MonkeyGame extends StateBasedGame {
 		ResourceManager.loadImage(Title_RSC);
 		ResourceManager.loadImage(YouWin_RSC);
 		ResourceManager.loadImage(GameOver_RSC);
+		ResourceManager.loadImage(LevelComplete_RSC);
 
 		monkey1 = new Monkey(tileSize*14.5f, tileSize*22.5f, 14, 22);
 
